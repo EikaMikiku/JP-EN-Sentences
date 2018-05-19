@@ -5,11 +5,14 @@ function Learn() {
 	this.jpWord = document.getElementById("jp-word");
 	this.engList = document.getElementById("english-list");
 	this.sentenceList = document.getElementById("sentence-list");
+	this.history = document.getElementById("history");
 	this.jsLocation = "./extracted/";
-	this.choiceCount = 4;
+	this.choiceCount = 6;
 
-	//Mutable State Vars:
+	//State vars:
 	this.courseId = null;
+	this.historyTotal = 0;
+	this.historyCorrect = 0;
 }
 
 Learn.prototype.populateTrainDom = function(pickedItems, correct) {
@@ -52,7 +55,9 @@ Learn.prototype.populateTrainDom = function(pickedItems, correct) {
 			let isCorrect = i === correct;
 			e.target.classList.add(isCorrect ? "correct" : "incorrect");
 			let audio = this.getAudio(pickedItems[i].sound);
-			audio.play();
+			if(!isCorrect) {
+				audio.play();
+			}
 
 			if(isCorrect) {
 				//Show sentences on correct selection
@@ -87,6 +92,16 @@ Learn.prototype.populateTrainDom = function(pickedItems, correct) {
 
 					this.sentenceList.appendChild(sDiv);
 				}
+			}
+
+			let isFirstAnswer = document.querySelectorAll(".incorrect,.correct").length === 1;
+			if(isFirstAnswer) {
+				//Update history
+				this.historyTotal++;
+				if(isCorrect) {
+					this.historyCorrect++;
+				}
+				this.history.innerText = this.historyCorrect + "/" + this.historyTotal;
 			}
 		}
 		this.engList.appendChild(div);

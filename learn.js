@@ -13,15 +13,15 @@ function Learn() {
 	this.courseId = null;
 	this.historyTotal = 0;
 	this.historyCorrect = 0;
+	this.previousCorrect = null;
 }
 
 Learn.prototype.populateTrainDom = function(pickedItems, correct) {
-	console.log(pickedItems);
-	
+	this.previousCorrect = pickedItems[correct].item.id;
+
 	//Japanese card
 	let jpNoKanji = this.getJpText(pickedItems[correct]);
 	let jpKanji = pickedItems[correct].item.cue.text;
-
 
 	let jpKanjiDiv = document.createElement("div");
 	jpKanjiDiv.innerText = jpKanji;
@@ -57,40 +57,12 @@ Learn.prototype.populateTrainDom = function(pickedItems, correct) {
 			let audio = this.getAudio(pickedItems[i].sound);
 			if(!isCorrect) {
 				audio.play();
-			}
-
-			if(isCorrect) {
-				//Show sentences on correct selection
-				let sentences = pickedItems[i].sentences;
-				for(let k = 0; k < sentences.length; k++) {
-					let sentenceAudio = this.getAudio(sentences[k].sound);
-					let sDiv = document.createElement("div");
-					sDiv.className = "col-6"; //Half screen
-					let sCard = document.createElement("div");
-					sCard.className = "card selectable";
-					sDiv.appendChild(sCard);
-					
-					let engDiv = document.createElement("div");
-					engDiv.innerHTML = this.getEngSentenceText(sentences[k]);
-
-					let jpNoKanjiDiv = document.createElement("div");
-					let jpKanjiDiv = document.createElement("div");
-					let noKanjiHtml = this.getJpSentenceText(sentences[k]);
-					let kanjiHtml = sentences[k].cue.text;
-					jpNoKanjiDiv.innerHTML = noKanjiHtml;
-					jpKanjiDiv.innerHTML = kanjiHtml;
-
-					if(kanjiHtml.replace(/\s/g, "") !== noKanjiHtml.replace(/\s/g, "")) {
-						sCard.appendChild(jpNoKanjiDiv);
-					}
-					sCard.appendChild(jpKanjiDiv);
-					sCard.appendChild(engDiv);
-
-					sCard.onclick = (e) => {
-						sentenceAudio.play();
-					};
-
-					this.sentenceList.appendChild(sDiv);
+			} else {
+				//Show english translation on sentenses
+				let el = document.getElementsByClassName("english-sentense");
+				console.log(el);
+				for(let k = 0, len = el.length; k < len; k++) {
+					el[k].style.display = "block";
 				}
 			}
 
@@ -105,6 +77,40 @@ Learn.prototype.populateTrainDom = function(pickedItems, correct) {
 			}
 		}
 		this.engList.appendChild(div);
+	}
+
+	//Show sentences
+	let sentences = pickedItems[correct].sentences;
+	for(let k = 0; k < sentences.length; k++) {
+		let sentenceAudio = this.getAudio(sentences[k].sound);
+		let sDiv = document.createElement("div");
+		sDiv.className = "col-6"; //Half screen
+		let sCard = document.createElement("div");
+		sCard.className = "card selectable";
+		sDiv.appendChild(sCard);
+		
+		let engDiv = document.createElement("div");
+		engDiv.className = "english-sentense";
+		engDiv.innerHTML = this.getEngSentenceText(sentences[k]);
+
+		let jpNoKanjiDiv = document.createElement("div");
+		let jpKanjiDiv = document.createElement("div");
+		let noKanjiHtml = this.getJpSentenceText(sentences[k]);
+		let kanjiHtml = sentences[k].cue.text;
+		jpNoKanjiDiv.innerHTML = noKanjiHtml;
+		jpKanjiDiv.innerHTML = kanjiHtml;
+
+		if(kanjiHtml.replace(/\s/g, "") !== noKanjiHtml.replace(/\s/g, "")) {
+			sCard.appendChild(jpNoKanjiDiv);
+		}
+		sCard.appendChild(jpKanjiDiv);
+		sCard.appendChild(engDiv);
+
+		sCard.onclick = (e) => {
+			sentenceAudio.play();
+		};
+
+		this.sentenceList.appendChild(sDiv);
 	}
 };
 
@@ -167,7 +173,7 @@ Learn.prototype.pick = function(amount) {
 
 	while(result.length !== amount) {
 		let idx = Math.floor(Math.random() * words.length);
-		if(!picked[idx]) {
+		if(!picked[idx] && this.previousCorrect !== words[idx].item.id) {
 			picked[idx] = true;
 			result.push(words[idx]);
 		}

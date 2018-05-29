@@ -58,12 +58,26 @@
 				bottom: 10px;
 				right: 15px;
 			}
-			.english-sentense {
+			.understand-speak {
+				position: absolute;
+				top: 0;
+				left: 0;
+			}
+			#understand-speak {
+				vertical-align: bottom;
+			}
+			.english-sentence {
 				display: none;
 			}
 		</style>
 	</head>
 	<body>
+		<div class="understand-speak">
+			<label>
+				Understand/Speak:
+				<input id="understand-speak" type="checkbox">
+			</label>
+		</div>
 		<div class="container">
 			<div class="row">
 				<div class="col is-right">
@@ -153,11 +167,27 @@
 				<div class="col">
 					<div id="jp-word" class="card jp selectable"></div>
 				</div>
-				<div id="english-list" class="col">
-				</div>
+				<div id="english-list" class="col"></div>
 			</div>
 			<div id="sentence-list" class="sentence-container row"></div>
 		</div>
 		<div id="history"></div>
 	</body>
+	<script type="text/javascript">
+		(() => {
+			window.localStorage.understand = window.localStorage.understand || "understand";
+			let toggle = document.getElementById("understand-speak");
+			if(window.localStorage.understand === "speak") {
+				toggle.checked = true;
+			}
+
+			toggle.onchange = (e) => {
+				if(toggle.checked) {
+					window.localStorage.understand = "speak";
+				} else {
+					window.localStorage.understand = "understand";
+				}
+			};
+		})();
+	</script>
 </html>

@@ -24,9 +24,17 @@ Learn.prototype.populateTrainSpeakingDom = function(pickedItems, correct) {
 	engDiv.innerText = engText;
 	this.jpWord.appendChild(engDiv);
 	this.jpWord.style.fontSize = "3vw";
+	this.jpWord.classList.remove("incorrect");
 	let jpAudio = this.getAudio(pickedItems[correct].sound);
 	this.jpWord.onclick = () => {
 		jpAudio.play();
+		let alreadyClicked = this.jpWord.classList.contains("incorrect") || this.jpWord.classList.contains("correct");
+		this.jpWord.classList.add("incorrect");
+		let isFirstAnswer = document.querySelectorAll(".incorrect,.correct").length === 1;
+		if(isFirstAnswer && !alreadyClicked) {
+			this.historyTotal++;
+			this.history.innerText = this.historyCorrect + "/" + this.historyTotal;
+		}
 	};
 
 	//Japanese romaji cards
@@ -42,6 +50,7 @@ Learn.prototype.populateTrainSpeakingDom = function(pickedItems, correct) {
 				return;
 			}
 			let isCorrect = i === correct;
+			let alreadyClicked = e.target.classList.contains("incorrect") || e.target.classList.contains("correct");
 			e.target.classList.add(isCorrect ? "correct" : "incorrect");
 			let audio = this.getAudio(pickedItems[i].sound);
 			audio.play();
@@ -82,7 +91,7 @@ Learn.prototype.populateTrainSpeakingDom = function(pickedItems, correct) {
 			}
 
 			let isFirstAnswer = document.querySelectorAll(".incorrect,.correct").length === 1;
-			if(isFirstAnswer) {
+			if(isFirstAnswer && !alreadyClicked) {
 				//Update history
 				this.historyTotal++;
 				if(isCorrect) {
@@ -131,6 +140,7 @@ Learn.prototype.populateTrainUnderstandingDom = function(pickedItems, correct) {
 				this.show();
 				return;
 			}
+			let alreadyClicked = e.target.classList.contains("incorrect") || e.target.classList.contains("correct");
 			let isCorrect = i === correct;
 			e.target.classList.add(isCorrect ? "correct" : "incorrect");
 			let audio = this.getAudio(pickedItems[i].sound);
@@ -146,7 +156,7 @@ Learn.prototype.populateTrainUnderstandingDom = function(pickedItems, correct) {
 			}
 
 			let isFirstAnswer = document.querySelectorAll(".incorrect,.correct").length === 1;
-			if(isFirstAnswer) {
+			if(isFirstAnswer && !alreadyClicked) {
 				//Update history
 				this.historyTotal++;
 				if(isCorrect) {

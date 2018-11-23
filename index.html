@@ -1,193 +1,137 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title>Japan! Oh yeah!</title>
-		<link rel="stylesheet" href="chota.min.css">
-		<script type="text/javascript" src="learn.js"></script>
-		<style type="text/css">
-			body {
-				margin: 10px 0 10px 0;
-			}
-			.container .row:first-child {
-				border-bottom: 2px solid lightgray;
-				margin-bottom: 10px;
-			}
-			.card {
-				text-align: center;
-				display: flex;
-				justify-content: center;
-				flex-direction: column;
-				border: 1px solid transparent;
-			}
-			.card.selectable:hover {
-				box-shadow: 0 0 3px #000;
-				cursor: pointer;
-			}
-			.card.selected {
-				box-shadow: 0 0 3px #20a6e7;
-				border: 1px solid #20a6e7;
-			}
-			.card.incorrect {
-				box-shadow: 0 0 2px #f55;
-				border: 1px solid #f55;
-			}
-			.card.correct {
-				box-shadow: 0 0 2px #1D6;
-				border: 1px solid #1D6;
-			}
-			.train-container .card.eng:not(:first-child) {
-				margin-top: 20px;
-			}
-			.train-container .card.jp {
-				height: 100%;
-				font-size: 6vw;
-			}
-			#jp-word, #english-list {
-				display: none;
-			}
-			.sentence-container {
-				border-top: 2px solid lightgray;
-				padding-top: 10px;
-			}
-			.ruby-text {
-				font-size: 2vw;
-			}
-			#history {
-				position: absolute;
-				bottom: 10px;
-				right: 15px;
-			}
-			.understand-speak {
-				position: absolute;
-				top: 0;
-				left: 0;
-			}
-			#understand-speak {
-				vertical-align: bottom;
-			}
-			.english-sentence {
-				display: none;
-			}
-		</style>
-	</head>
-	<body>
-		<div class="understand-speak">
-			<label>
-				Understand/Speak:
-				<input id="understand-speak" type="checkbox">
-			</label>
-		</div>
-		<div class="container">
-			<div class="row">
-				<div class="col is-right">
-					<label>Course select: </label>
-				</div>
-				<div class="col">
+<head>
+	<link rel="stylesheet" type="text/css" href="./bulma.min.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="utf-8">
+	<script type="text/javascript" src="learn.js"></script>
+	<title>Learn Japanese</title>
+	<style type="text/css">
+		.navbar {
+			justify-content: center;
+			align-items: center;
+		}
+		.title {
+			line-height: initial;
+		}
+		.section {
+			padding: 1rem 1rem;
+		}
+		b {
+			font-weight: normal;
+		}
+	</style>
+</head>
+<body>
+	<nav class="navbar has-shadow is-grey is-flex" role="navigation">
+		<div class="field has-addons">
+			<div class="control">
+				<div class="select">
 					<select id="course-select">
-						<optgroup label="Japanese Core 1000">
-							<option value="Japanese_Core_1000_Step_1">Japanese Core 1000 Step 1</option>
-							<option value="Japanese_Core_1000_Step_2">Japanese Core 1000 Step 2</option>
-							<option value="Japanese_Core_1000_Step_3">Japanese Core 1000 Step 3</option>
-							<option value="Japanese_Core_1000_Step_4">Japanese Core 1000 Step 4</option>
-							<option value="Japanese_Core_1000_Step_5">Japanese Core 1000 Step 5</option>
-							<option value="Japanese_Core_1000_Step_6">Japanese Core 1000 Step 6</option>
-							<option value="Japanese_Core_1000_Step_7">Japanese Core 1000 Step 7</option>
-							<option value="Japanese_Core_1000_Step_8">Japanese Core 1000 Step 8</option>
-							<option value="Japanese_Core_1000_Step_9">Japanese Core 1000 Step 9</option>
-							<option value="Japanese_Core_1000_Step_10">Japanese Core 1000 Step 10</option>
+						<optgroup label="Japanese Core 1">
+							<option value="Japanese_Core_1000_Step_1">Japanese Core 1 Step 1</option>
+							<option value="Japanese_Core_1000_Step_2">Japanese Core 1 Step 2</option>
+							<option value="Japanese_Core_1000_Step_3">Japanese Core 1 Step 3</option>
+							<option value="Japanese_Core_1000_Step_4">Japanese Core 1 Step 4</option>
+							<option value="Japanese_Core_1000_Step_5">Japanese Core 1 Step 5</option>
+							<option value="Japanese_Core_1000_Step_6">Japanese Core 1 Step 6</option>
+							<option value="Japanese_Core_1000_Step_7">Japanese Core 1 Step 7</option>
+							<option value="Japanese_Core_1000_Step_8">Japanese Core 1 Step 8</option>
+							<option value="Japanese_Core_1000_Step_9">Japanese Core 1 Step 9</option>
+							<option value="Japanese_Core_1000_Step_10">Japanese Core 1 Step 10</option>
 						</optgroup>
-						<optgroup label="Japanese Core 2000">
-							<option value="Japanese_Core_2000_Step_1">Japanese Core 2000 Step 1</option>
-							<option value="Japanese_Core_2000_Step_2">Japanese Core 2000 Step 2</option>
-							<option value="Japanese_Core_2000_Step_3">Japanese Core 2000 Step 3</option>
-							<option value="Japanese_Core_2000_Step_4">Japanese Core 2000 Step 4</option>
-							<option value="Japanese_Core_2000_Step_5">Japanese Core 2000 Step 5</option>
-							<option value="Japanese_Core_2000_Step_6">Japanese Core 2000 Step 6</option>
-							<option value="Japanese_Core_2000_Step_7">Japanese Core 2000 Step 7</option>
-							<option value="Japanese_Core_2000_Step_8">Japanese Core 2000 Step 8</option>
-							<option value="Japanese_Core_2000_Step_9">Japanese Core 2000 Step 9</option>
-							<option value="Japanese_Core_2000_Step_10">Japanese Core 2000 Step 10</option>
+						<optgroup label="Japanese Core 2">
+							<option value="Japanese_Core_2000_Step_1">Japanese Core 2 Step 1</option>
+							<option value="Japanese_Core_2000_Step_2">Japanese Core 2 Step 2</option>
+							<option value="Japanese_Core_2000_Step_3">Japanese Core 2 Step 3</option>
+							<option value="Japanese_Core_2000_Step_4">Japanese Core 2 Step 4</option>
+							<option value="Japanese_Core_2000_Step_5">Japanese Core 2 Step 5</option>
+							<option value="Japanese_Core_2000_Step_6">Japanese Core 2 Step 6</option>
+							<option value="Japanese_Core_2000_Step_7">Japanese Core 2 Step 7</option>
+							<option value="Japanese_Core_2000_Step_8">Japanese Core 2 Step 8</option>
+							<option value="Japanese_Core_2000_Step_9">Japanese Core 2 Step 9</option>
+							<option value="Japanese_Core_2000_Step_10">Japanese Core 2 Step 10</option>
 						</optgroup>
-						<optgroup label="Japanese Core 3000">
-							<option value="Japanese_Core_3000_Step_1">Japanese Core 3000 Step 1</option>
-							<option value="Japanese_Core_3000_Step_2">Japanese Core 3000 Step 2</option>
-							<option value="Japanese_Core_3000_Step_3">Japanese Core 3000 Step 3</option>
-							<option value="Japanese_Core_3000_Step_4">Japanese Core 3000 Step 4</option>
-							<option value="Japanese_Core_3000_Step_5">Japanese Core 3000 Step 5</option>
-							<option value="Japanese_Core_3000_Step_6">Japanese Core 3000 Step 6</option>
-							<option value="Japanese_Core_3000_Step_7">Japanese Core 3000 Step 7</option>
-							<option value="Japanese_Core_3000_Step_8">Japanese Core 3000 Step 8</option>
-							<option value="Japanese_Core_3000_Step_9">Japanese Core 3000 Step 9</option>
-							<option value="Japanese_Core_3000_Step_10">Japanese Core 3000 Step 10</option>
+						<optgroup label="Japanese Core 3">
+							<option value="Japanese_Core_3000_Step_1">Japanese Core 3 Step 1</option>
+							<option value="Japanese_Core_3000_Step_2">Japanese Core 3 Step 2</option>
+							<option value="Japanese_Core_3000_Step_3">Japanese Core 3 Step 3</option>
+							<option value="Japanese_Core_3000_Step_4">Japanese Core 3 Step 4</option>
+							<option value="Japanese_Core_3000_Step_5">Japanese Core 3 Step 5</option>
+							<option value="Japanese_Core_3000_Step_6">Japanese Core 3 Step 6</option>
+							<option value="Japanese_Core_3000_Step_7">Japanese Core 3 Step 7</option>
+							<option value="Japanese_Core_3000_Step_8">Japanese Core 3 Step 8</option>
+							<option value="Japanese_Core_3000_Step_9">Japanese Core 3 Step 9</option>
+							<option value="Japanese_Core_3000_Step_10">Japanese Core 3 Step 10</option>
 						</optgroup>
-						<optgroup label="Japanese Core 4000">
-							<option value="Japanese_Core_4000_Step_1">Japanese Core 4000 Step 1</option>
-							<option value="Japanese_Core_4000_Step_2">Japanese Core 4000 Step 2</option>
-							<option value="Japanese_Core_4000_Step_3">Japanese Core 4000 Step 3</option>
-							<option value="Japanese_Core_4000_Step_4">Japanese Core 4000 Step 4</option>
-							<option value="Japanese_Core_4000_Step_5">Japanese Core 4000 Step 5</option>
-							<option value="Japanese_Core_4000_Step_6">Japanese Core 4000 Step 6</option>
-							<option value="Japanese_Core_4000_Step_7">Japanese Core 4000 Step 7</option>
-							<option value="Japanese_Core_4000_Step_8">Japanese Core 4000 Step 8</option>
-							<option value="Japanese_Core_4000_Step_9">Japanese Core 4000 Step 9</option>
-							<option value="Japanese_Core_4000_Step_10">Japanese Core 4000 Step 10</option>
+						<optgroup label="Japanese Core 4">
+							<option value="Japanese_Core_4000_Step_1">Japanese Core 4 Step 1</option>
+							<option value="Japanese_Core_4000_Step_2">Japanese Core 4 Step 2</option>
+							<option value="Japanese_Core_4000_Step_3">Japanese Core 4 Step 3</option>
+							<option value="Japanese_Core_4000_Step_4">Japanese Core 4 Step 4</option>
+							<option value="Japanese_Core_4000_Step_5">Japanese Core 4 Step 5</option>
+							<option value="Japanese_Core_4000_Step_6">Japanese Core 4 Step 6</option>
+							<option value="Japanese_Core_4000_Step_7">Japanese Core 4 Step 7</option>
+							<option value="Japanese_Core_4000_Step_8">Japanese Core 4 Step 8</option>
+							<option value="Japanese_Core_4000_Step_9">Japanese Core 4 Step 9</option>
+							<option value="Japanese_Core_4000_Step_10">Japanese Core 4 Step 10</option>
 						</optgroup>
-						<optgroup label="Japanese Core 5000">
-							<option value="Japanese_Core_5000_Step_1">Japanese Core 5000 Step 1</option>
-							<option value="Japanese_Core_5000_Step_2">Japanese Core 5000 Step 2</option>
-							<option value="Japanese_Core_5000_Step_3">Japanese Core 5000 Step 3</option>
-							<option value="Japanese_Core_5000_Step_4">Japanese Core 5000 Step 4</option>
-							<option value="Japanese_Core_5000_Step_5">Japanese Core 5000 Step 5</option>
-							<option value="Japanese_Core_5000_Step_6">Japanese Core 5000 Step 6</option>
-							<option value="Japanese_Core_5000_Step_7">Japanese Core 5000 Step 7</option>
-							<option value="Japanese_Core_5000_Step_8">Japanese Core 5000 Step 8</option>
-							<option value="Japanese_Core_5000_Step_9">Japanese Core 5000 Step 9</option>
-							<option value="Japanese_Core_5000_Step_10">Japanese Core 5000 Step 10</option>
+						<optgroup label="Japanese Core 5">
+							<option value="Japanese_Core_5000_Step_1">Japanese Core 5 Step 1</option>
+							<option value="Japanese_Core_5000_Step_2">Japanese Core 5 Step 2</option>
+							<option value="Japanese_Core_5000_Step_3">Japanese Core 5 Step 3</option>
+							<option value="Japanese_Core_5000_Step_4">Japanese Core 5 Step 4</option>
+							<option value="Japanese_Core_5000_Step_5">Japanese Core 5 Step 5</option>
+							<option value="Japanese_Core_5000_Step_6">Japanese Core 5 Step 6</option>
+							<option value="Japanese_Core_5000_Step_7">Japanese Core 5 Step 7</option>
+							<option value="Japanese_Core_5000_Step_8">Japanese Core 5 Step 8</option>
+							<option value="Japanese_Core_5000_Step_9">Japanese Core 5 Step 9</option>
+							<option value="Japanese_Core_5000_Step_10">Japanese Core 5 Step 10</option>
 						</optgroup>
-						<optgroup label="Japanese Core 6000">
-							<option value="Japanese_Core_6000_Step_1">Japanese Core 6000 Step 1</option>
-							<option value="Japanese_Core_6000_Step_2">Japanese Core 6000 Step 2</option>
-							<option value="Japanese_Core_6000_Step_3">Japanese Core 6000 Step 3</option>
-							<option value="Japanese_Core_6000_Step_4">Japanese Core 6000 Step 4</option>
-							<option value="Japanese_Core_6000_Step_5">Japanese Core 6000 Step 5</option>
-							<option value="Japanese_Core_6000_Step_6">Japanese Core 6000 Step 6</option>
-							<option value="Japanese_Core_6000_Step_7">Japanese Core 6000 Step 7</option>
-							<option value="Japanese_Core_6000_Step_8">Japanese Core 6000 Step 8</option>
-							<option value="Japanese_Core_6000_Step_9">Japanese Core 6000 Step 9</option>
-							<option value="Japanese_Core_6000_Step_10">Japanese Core 6000 Step 10</option>
+						<optgroup label="Japanese Core 6">
+							<option value="Japanese_Core_6000_Step_1">Japanese Core 6 Step 1</option>
+							<option value="Japanese_Core_6000_Step_2">Japanese Core 6 Step 2</option>
+							<option value="Japanese_Core_6000_Step_3">Japanese Core 6 Step 3</option>
+							<option value="Japanese_Core_6000_Step_4">Japanese Core 6 Step 4</option>
+							<option value="Japanese_Core_6000_Step_5">Japanese Core 6 Step 5</option>
+							<option value="Japanese_Core_6000_Step_6">Japanese Core 6 Step 6</option>
+							<option value="Japanese_Core_6000_Step_7">Japanese Core 6 Step 7</option>
+							<option value="Japanese_Core_6000_Step_8">Japanese Core 6 Step 8</option>
+							<option value="Japanese_Core_6000_Step_9">Japanese Core 6 Step 9</option>
+							<option value="Japanese_Core_6000_Step_10">Japanese Core 6 Step 10</option>
 						</optgroup>
 					</select>
 				</div>
-				<div class="col">
-					<a onclick="new Learn().load()" href="#" class="button primary">Learn!</a>
-				</div>
 			</div>
-			<div class="train-container row">
-				<div class="col">
-					<div id="jp-word" class="card jp selectable"></div>
-				</div>
-				<div id="english-list" class="col"></div>
+			<div class="control">
+				<button class="button" onclick="new Learn().load()">Learn!</button>
 			</div>
-			<div id="sentence-list" class="sentence-container row"></div>
 		</div>
-		<div id="history"></div>
-	</body>
-	<script type="text/javascript">
-		(() => {
-			window.localStorage.understand = window.localStorage.understand || "understand";
-			let toggle = document.getElementById("understand-speak");
-			if(window.localStorage.understand === "speak") {
-				toggle.checked = true;
-			}
-
-			toggle.onchange = (e) => {
-				if(toggle.checked) {
-					window.localStorage.understand = "speak";
-				} else {
-					window.localStorage.understand = "understand";
-				}
-			};
-		})();
-	</script>
+	</nav>
+	<section class="section">
+		<div class="columns">
+			<div class="column">
+				<div class="card has-text-centered">
+					<div class="card-content">
+						<div class="content">
+							<p id="jp-sentence-text" class="title is-size-4 has-text-weight-normal"></p>
+							<p id="jp-nokanji-sentence-text" class="subtitle is-size-6"></p>
+						</div>
+					</div>
+					<footer class="card-footer">
+						<a id="play-audio" href="#" class="card-footer-item">Play audio</a>
+						<a id="view-answer" href="#" class="card-footer-item">View answer</a>
+					</footer>
+				</div>
+			</div>
+		</div>
+	</section>
+	<section id="answer" class="hero is-success is-hidden has-text-centered">
+		<div class="hero-body ">
+			<div class="container">
+				<h1 id="answer-text" class="title">Primary title</h1>
+			</div>
+		</div>
+	</section>
+</body>
 </html>

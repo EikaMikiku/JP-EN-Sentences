@@ -1,4 +1,4 @@
-function Learn() {
+function Learn(isAuto) {
 	this.answerContainer = document.getElementById("answer");
 	this.answerText = document.getElementById("answer-text");
 	this.jpSentenceText = document.getElementById("jp-sentence-text");
@@ -7,8 +7,23 @@ function Learn() {
 	this.viewAnswer = document.getElementById("view-answer");
 	this.jsLocation = "./extracted/";
 	this.currentAudio = null;
+	if(isAuto) {
+		this.autoDelay = 5000;
+		this.isAuto = true;
+		window.speechSynthesis.getVoices(); //Init voices
+	}
 }
 
+
+Learn.prototype.speak = function(text, cb) {
+	let utter = new SpeechSynthesisUtterance(text);
+	utter.voice = window.speechSynthesis.getVoices().find((e) => e.voiceURI === "Google UK English Male");
+	utter.rate = 1;
+	utter.pitch = 1;
+	utter.volume = 1;
+	utter.onend = cb;
+	window.speechSynthesis.speak(utter);
+};
 
 Learn.prototype.getAudio = function(path, courseId) {
 	let audio = new Audio(
@@ -22,7 +37,7 @@ Learn.prototype.getAudio = function(path, courseId) {
 Learn.prototype.populateData = function(data) {
 	this.jpSentenceText.innerHTML = data.cue.text;
 	let tr = data.cue.transliterations;
-	this.jpNokanjiSentenceText.innerHTML = tr.Hrkt || tr.Hira || tr.Latn || "";
+	this.jpNokanjiSentenceText.innerHTML = tr.Hrkt || tr.Hira || tr.Latn || "???";
 	this.answerText.innerText = data.response.text;
 };
 
@@ -32,6 +47,19 @@ Learn.prototype.show = function(course) {
 	let picked = sentences[Math.floor(Math.random() * sentences.length)];
 	this.populateData(picked);
 	let audio = this.getAudio(picked.sound, window[course].id);
+	if(this.isAuto) {
+		audio.onended = () => {
+			setTimeout(() => {
+				this.viewAnswer.click();
+				this.speak(this.answerText.innerText, () => {
+					setTimeout(() => {
+						this.clean();
+						this.show(course);
+					}, this.autoDelay / 2);
+				});
+			}, this.autoDelay);
+		};
+	}
 	audio.play();
 	this.currentAudio = audio;
 	this.viewAnswer.onclick = () => {

@@ -47,6 +47,7 @@ Learn.prototype.show = function(course) {
 	let picked = sentences[Math.floor(Math.random() * sentences.length)];
 	this.populateData(picked);
 	let audio = this.getAudio(picked.sound, window[course].id);
+	document.body.appendChild(audio); //Just so we can find out the link if needed
 	if(this.isAuto) {
 		audio.onended = () => {
 			setTimeout(() => {
@@ -107,5 +108,12 @@ Learn.prototype.clean = function() {
 	this.viewAnswer.innerText = "View answer";
 	if(!this.answerContainer.classList.contains("is-hidden")) {
 		this.answerContainer.classList.add("is-hidden");
+	}
+	//Remove audio nodes from body
+	let nodes = document.body.childNodes;
+	for(let i = nodes.length -1; i >= 0; i--) {
+		if(nodes[i].nodeName === "AUDIO") {
+			document.body.removeChild(nodes[i]);
+		}
 	}
 };

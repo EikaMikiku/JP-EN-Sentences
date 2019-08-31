@@ -6,6 +6,8 @@ function Learn() {
 	this.playAudio = document.getElementById("play-audio");
 	this.viewAnswer = document.getElementById("view-answer");
 	this.nextRandom = document.getElementById("next-random");
+	this.indexPicker = document.getElementById("indexPicker");
+	this.indexPicker.classList.remove("is-hidden");
 	this.jsLocation = "./extracted/";
 	this.currentAudio = null;
 	this.currentSentenceIndex = 0;
@@ -28,15 +30,31 @@ Learn.prototype.populateData = function(data) {
 
 Learn.prototype.show = function(course, isRandom) {
 	let sentences = this.findSentences(course);
-	let idx = isRandom ? Math.floor(Math.random() * sentences.length) : this.currentSentenceIndex++;
+	let idx = isRandom ? Math.floor(Math.random() * sentences.length) : this.currentSentenceIndex;
+	this.currentSentenceIndex = idx;
+	this.indexPicker.innerText = (idx + 1) + "/" + sentences.length;
+
 	let picked = sentences[idx];
 	this.populateData(picked);
+
 	let audio = this.getAudio(picked.sound, window[course].id);
 	document.body.appendChild(audio); //Just so we can find out the link if needed
 	audio.play();
 	this.currentAudio = audio;
+	this.indexPicker.onclick = () => {
+		let userInput = prompt("Enter new sentence index");
+		let newIdx = parseInt(userInput);
+		if(isNaN(newIdx) || newIdx.toString() !== userInput || newIdx > sentences.length || newIdx < 1) {
+			alert("Bad index.");
+		} else {
+			this.currentSentenceIndex = newIdx - 1;
+			this.clean();
+			this.show(course);
+		}
+	};
 	this.viewAnswer.onclick = () => {
 		if(this.viewAnswer.innerText === "Next") {
+			this.currentSentenceIndex++;
 			this.clean();
 			this.show(course);
 		} else {

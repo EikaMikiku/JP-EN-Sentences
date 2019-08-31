@@ -1,38 +1,23 @@
-function Learn(isAuto) {
+function Learn() {
 	this.answerContainer = document.getElementById("answer");
 	this.answerText = document.getElementById("answer-text");
 	this.jpSentenceText = document.getElementById("jp-sentence-text");
 	this.jpNokanjiSentenceText = document.getElementById("jp-nokanji-sentence-text");
 	this.playAudio = document.getElementById("play-audio");
 	this.viewAnswer = document.getElementById("view-answer");
+	this.nextRandom = document.getElementById("next-random");
 	this.jsLocation = "./extracted/";
 	this.currentAudio = null;
-	if(isAuto) {
-		this.autoDelay = 5000;
-		this.isAuto = true;
-		window.speechSynthesis.getVoices(); //Init voices
-	}
+	this.currentSentenceIndex = 0;
 }
-
-
-Learn.prototype.speak = function(text, cb) {
-	let utter = new SpeechSynthesisUtterance(text);
-	utter.voice = window.speechSynthesis.getVoices().find((e) => e.voiceURI === "Google UK English Male");
-	utter.rate = 1;
-	utter.pitch = 1;
-	utter.volume = 1;
-	utter.onend = cb;
-	window.speechSynthesis.speak(utter);
-};
 
 Learn.prototype.getAudio = function(path, courseId) {
 	let audio = new Audio(
-		this.jsLocation + courseId + "/" + 
+		this.jsLocation + courseId + "/" +
 		encodeURIComponent(encodeURIComponent(path))
 	);
 	return audio;
 };
-
 
 Learn.prototype.populateData = function(data) {
 	this.jpSentenceText.innerHTML = data.cue.text;
@@ -41,26 +26,13 @@ Learn.prototype.populateData = function(data) {
 	this.answerText.innerText = data.response.text;
 };
 
-
-Learn.prototype.show = function(course) {
+Learn.prototype.show = function(course, isRandom) {
 	let sentences = this.findSentences(course);
-	let picked = sentences[Math.floor(Math.random() * sentences.length)];
+	let idx = isRandom ? Math.floor(Math.random() * sentences.length) : this.currentSentenceIndex++;
+	let picked = sentences[idx];
 	this.populateData(picked);
 	let audio = this.getAudio(picked.sound, window[course].id);
 	document.body.appendChild(audio); //Just so we can find out the link if needed
-	if(this.isAuto) {
-		audio.onended = () => {
-			setTimeout(() => {
-				this.viewAnswer.click();
-				this.speak(this.answerText.innerText, () => {
-					setTimeout(() => {
-						this.clean();
-						this.show(course);
-					}, this.autoDelay / 2);
-				});
-			}, this.autoDelay);
-		};
-	}
 	audio.play();
 	this.currentAudio = audio;
 	this.viewAnswer.onclick = () => {
@@ -70,7 +42,12 @@ Learn.prototype.show = function(course) {
 		} else {
 			this.answerContainer.classList.remove("is-hidden");
 			this.viewAnswer.innerText = "Next";
+			this.nextRandom.classList.remove("is-hidden");
 		}
+	};
+	this.nextRandom.onclick = () => {
+		this.clean();
+		this.show(course, true);
 	};
 	this.playAudio.onclick = () => {
 		if(this.currentAudio) {
@@ -78,7 +55,6 @@ Learn.prototype.show = function(course) {
 		}
 	};
 };
-
 
 Learn.prototype.findSentences = function(course) {
 	let items = window[course].goal_items;
@@ -91,7 +67,6 @@ Learn.prototype.findSentences = function(course) {
 	return found;
 };
 
-
 Learn.prototype.load = function() {
 	let course = document.getElementById("course-select").value;
 	let script = document.createElement("script");
@@ -103,9 +78,9 @@ Learn.prototype.load = function() {
 	document.head.appendChild(script);
 };
 
-
 Learn.prototype.clean = function() {
 	this.viewAnswer.innerText = "View answer";
+	this.nextRandom.classList.add("is-hidden");
 	if(!this.answerContainer.classList.contains("is-hidden")) {
 		this.answerContainer.classList.add("is-hidden");
 	}

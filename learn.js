@@ -7,6 +7,8 @@ function Learn() {
 	this.viewAnswer = document.getElementById("view-answer");
 	this.nextRandom = document.getElementById("next-random");
 	this.indexPicker = document.getElementById("indexPicker");
+	this.VolumeSlider = document.getElementById("VolumeSlider");
+	this.AutoPlayAudio = document.getElementById("AutoPlayAudio");
 	this.indexPicker.classList.remove("is-hidden");
 	this.jsLocation = "./extracted/";
 	this.currentAudio = null;
@@ -39,7 +41,10 @@ Learn.prototype.show = function(course, isRandom) {
 
 	let audio = this.getAudio(picked.sound, window[course].id);
 	document.body.appendChild(audio); //Just so we can find out the link if needed
-	audio.play();
+	audio.volume = parseInt(this.VolumeSlider.value) / 100;
+	if(this.AutoPlayAudio.checked) {
+		audio.play();
+	}
 	this.currentAudio = audio;
 	this.indexPicker.onclick = () => {
 		let userInput = prompt("Enter new sentence index");
@@ -69,6 +74,7 @@ Learn.prototype.show = function(course, isRandom) {
 	};
 	this.playAudio.onclick = () => {
 		if(this.currentAudio) {
+			this.currentAudio.volume = parseInt(this.VolumeSlider.value) / 100;
 			this.currentAudio.play();
 		}
 	};

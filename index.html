@@ -20,10 +20,27 @@
 		b {
 			font-weight: normal;
 		}
+		.settings {
+			position: absolute;
+			left: 20px;
+			top: 16px;
+		}
+		.auto-play-label {
+			position: relative;
+			top: -3px;
+			right: -20px;
+		}
 	</style>
 </head>
 <body>
 	<nav class="navbar has-shadow is-grey is-flex" role="navigation">
+		<div class="settings">
+			<input id="VolumeSlider" type="range" value="100" min="0" max="100">
+			<label class="auto-play-label">
+				Auto play audio?
+				<input id="AutoPlayAudio" type="checkbox" checked>
+			</label>
+		</div>
 		<div class="field has-addons">
 			<div class="control">
 				<button class="button is-hidden" id="indexPicker"></button>

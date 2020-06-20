@@ -26,7 +26,7 @@ Learn.prototype.getAudio = function(path, courseId) {
 Learn.prototype.populateData = function(data) {
 	this.jpSentenceText.innerHTML = data.cue.text;
 	let tr = data.cue.transliterations;
-	this.jpNokanjiSentenceText.innerHTML = tr.Hrkt || tr.Hira || tr.Latn || "???";
+	this.jpNokanjiSentenceText.innerHTML = (tr.Hrkt || tr.Hira || tr.Latn || "???").replace(" ", "  ");
 	this.answerText.innerText = data.response.text;
 };
 
